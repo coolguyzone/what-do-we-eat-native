@@ -46,13 +46,16 @@ const extractKey = ({id}) => id;
 
 
 
+
 export default class App extends Component {
 
-  removeFood = () => {
+  removeFood(target) {
+    let x = this.state.foodsArray.indexOf(target.item);
+    console.log(this.state.foodsArray.indexOf(target.item));
+    this.state.foodsArray.splice(x, 1);
     this.setState({
-      foodsArray: this.state.foodsArray.slice(0,this.state.foodsArray.length-1)
+      foodsArray: this.state.foodsArray
     });
-    console.log(this.state.foodsArray)
   }
 
   constructor(props) {
@@ -67,7 +70,10 @@ export default class App extends Component {
     return (
       <TouchableOpacity
       style={[styles.option, {backgroundColor}]}
-      onPress={() => this.removeFood()}
+      onPress={() => {
+        this.removeFood({item});
+        this.forceUpdate();
+      }}
       >
         <Text style={styles.optionText}>{item.name} {item.emoji}</Text>
       </TouchableOpacity>
@@ -79,6 +85,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <FlatList
         data={this.state.foodsArray}
+        extraData={this.state}
         renderItem={this.renderItem}
         keyExtractor={extractKey}
         />
