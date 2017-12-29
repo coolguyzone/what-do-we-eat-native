@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 
 import foods from './foods';
 import playerConditions from './playerconditions';
@@ -14,23 +14,21 @@ let colorStopLimit = colors.length;
 let shuffleCount = 1;
 
 
+
+const foodsList = []
+
 for (var i = 0; i < foodStopLimit; i++) {
   var randoFoodIndex = Math.floor(Math.random() * foods.length);
 
   category = foods[randoFoodIndex].category;
   console.log(category);
-
-  // if($.inArray( category, categories )>=0){
   if (categories.indexOf(category) >= 0) {
-
      // code for true condition
 } else{
   categories.push(category);
   randoFoods.push(foods[randoFoodIndex]);
-
   var removedFoods = foods.splice(randoFoodIndex, 1)[0];
 }
-
      // code for false condition
 }
 
@@ -40,53 +38,52 @@ for (var i = 0; i < colorStopLimit; i++) {
   var removedColors = colors.splice(randoColorIndex, 1)[0];
 }
 
-class Option extends Component {
-  render() {
-    const {backgroundColor, txt, display} = this.props
-    return (
-      <View style={[styles.option, {backgroundColor}]}>
-        <Text style={styles.optionText}>{txt}</Text>
-      </View>
-    )
-  }
+for (var i = 0; i < 7; i++) {
+  foodsList.push({id: i, name: randoFoods[i].name, emoji: randoFoods[i].emoji, backgroundColor: randoColors[i]})
 }
+
+const extractKey = ({id}) => id;
 
 
 
 export default class App extends Component {
+
+  removeFood = () => {
+    this.setState({
+      foodsArray: this.state.foodsArray.slice(0,this.state.foodsArray.length-1)
+    });
+    console.log(this.state.foodsArray)
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      foodsArray: foodsList
+    }
+  }
+
+  renderItem = ({item}) => {
+    const {backgroundColor} = item
+    return (
+      <TouchableOpacity
+      style={[styles.option, {backgroundColor}]}
+      onPress={() => this.removeFood()}
+      >
+        <Text style={styles.optionText}>{item.name} {item.emoji}</Text>
+      </TouchableOpacity>
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Option
-        backgroundColor={randoColors[0]}
-        txt={`${randoFoods[0].name} ${randoFoods[0].emoji}`}
-        />
-        <Option
-        backgroundColor={randoColors[1]}
-        txt={`${randoFoods[1].name} ${randoFoods[1].emoji}`} style={{height:0,width:0,}}
-        />
-        <Option
-        backgroundColor={randoColors[2]}
-        txt={`${randoFoods[2].name} ${randoFoods[2].emoji}`}
-        />
-        <Option
-        backgroundColor={randoColors[3]}
-        txt={`${randoFoods[3].name} ${randoFoods[3].emoji}`}
-        />
-        <Option
-        backgroundColor={randoColors[4]}
-        txt={`${randoFoods[4].name} ${randoFoods[4].emoji}`}
-        />
-        <Option
-        backgroundColor={randoColors[5]}
-        txt={`${randoFoods[5].name} ${randoFoods[5].emoji}`}
-        />
-        <Option
-        backgroundColor={randoColors[6]}
-        txt={`${randoFoods[6].name} ${randoFoods[6].emoji}`}
+        <FlatList
+        data={this.state.foodsArray}
+        renderItem={this.renderItem}
+        keyExtractor={extractKey}
         />
         <Text style={{color:'white',}}>
-        {categories[3]}
+        fawwwk
         </Text>
       </View>
 
