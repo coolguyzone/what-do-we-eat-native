@@ -12,6 +12,10 @@ let foodStopLimit = foods.length;
 let colorStopLimit = colors.length;
 // var shuffle = document.querySelector(".shuffle");
 let shuffleCount = 1;
+let turn = 1;
+
+let textOne = 'Whoever has the smaller nose is player one.';
+let textTwo = 'Player one, please eliminate an option.';
 
 
 
@@ -56,6 +60,18 @@ export default class App extends Component {
     this.setState({
       foodsArray: this.state.foodsArray
     });
+    turn++;
+    if (turn === 7) {
+      textOne = 'It has been decided!';
+      textTwo = 'Tonight you will dine on:';
+    }
+    else if (turn % 2 === 0) {
+      textOne = 'Player two is up!';
+      textTwo = 'Player two, please eliminate an option';
+    } else {
+      textOne = 'Player one is up!';
+      textTwo = 'Player one, please eliminate an option';
+    }
   }
 
   constructor(props) {
@@ -83,15 +99,15 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+      <Text style={styles.headerText}>What Do We Eat?!</Text>
+      <Text style={styles.mainText}>{textOne}</Text>
+      <Text style={styles.mainText}>{textTwo}</Text>
         <FlatList
         data={this.state.foodsArray}
         extraData={this.state}
         renderItem={this.renderItem}
         keyExtractor={extractKey}
         />
-        <Text style={{color:'white',}}>
-        fawwwk
-        </Text>
       </View>
 
     );
@@ -103,6 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     alignItems: 'center',
+    marginTop: 20,
   },
   option: {
     height: 50,
@@ -111,10 +128,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   optionText: {
-    fontSize: 20,
+    fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
     lineHeight: 50,
     color: 'white',
   },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'white',
+    marginTop: 10,
+  },
+  mainText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'white',
+  }
 });
